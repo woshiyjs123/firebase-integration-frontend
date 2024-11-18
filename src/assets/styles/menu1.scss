@@ -1,0 +1,82 @@
+.sidebar-container {
+    background: linear-gradient(180deg, #1848cb 0%, #725eff 100%) !important;
+    // .el-scrollbar{
+    //     background: linear-gradient(360deg, #1848cb 0%, #725eff 100%) !important;
+    // }
+    .menu {
+        .el-scrollbar__wrap {
+            background: initial;
+        }
+    }
+
+    .el-menu {
+        background: initial;
+        .el-menu-item.is-active {
+            // color: var(--cus-menu-active-icon);
+            color: #fff;
+            &::after{
+                width: 88%;
+                content: "";
+                position: absolute;
+                top: 5px;
+                bottom: 5px;
+                right: 0;
+                margin: auto;
+                left: 0;
+                z-index: 0;
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .el-menu-item:hover {
+            background: initial;
+            &::after{
+                width: 88%;
+                content: "";
+                position: absolute;
+                top: 5px;
+                bottom: 5px;
+                right: 0;
+                margin: auto;
+                left: 0;
+                z-index: 0;
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+        .el-sub-menu__title:hover{
+            background: initial;
+            &::after{
+                width: 88%;
+                content: "";
+                position: absolute;
+                top: 5px;
+                bottom: 5px;
+                right: 0;
+                margin: auto;
+                left: 0;
+                z-index: 0;
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+        .el-sub-menu{
+            .el-menu-item{
+                background-color: initial;
+            }
+        }
+        .menu-title{
+            color: #fff;
+        }
+        .svg-icon{
+            color: #fff;
+        }
+    }
+}
+
+// .sidebar-logo-container{
+//     background:#235af1;
+// }
+
+:root {
+    --el-color-primary: #235af1  !important;
+    --el-color-primary-light-3: #6E7DFD !important;
+}
