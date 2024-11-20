@@ -19,7 +19,7 @@ export const getRouters = () => {
           component: "Layout",
           alwaysShow: true,
           meta: {
-            title: "慈善网站",
+            title: "慈善社区",
             icon: "list",
             noCache: false,
             link: null,
@@ -68,7 +68,7 @@ export const getRouters = () => {
               component:
                 "system/bizCharityConsultationReservationManagement/index",
               meta: {
-                title: "慈善咨询预约管理",
+                title: "邮件发送",
                 icon: "logininfor",
                 noCache: false,
                 link: null,

@@ -159,3 +159,12 @@ export function aiAskText(data) {
     data,
   });
 }
+
+// 邮件发送
+export function mailSend(data) {
+  return request({
+    url: "/mail/send",
+    method: "post",
+    data,
+  });
+}

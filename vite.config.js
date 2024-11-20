@@ -54,6 +54,12 @@ export default defineConfig(({ mode, command }) => {
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/ai/, "/ai"),
         },
+        "/mail": {
+          target:
+            "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/mail/, "/mail"),
+        },
       },
     },
     //fix:error:stdin>:7356:1: warning: "@charset" must be the first rule in the file

@@ -3,70 +3,6 @@
     <el-row :gutter="20">
       <!--用户数据-->
       <el-col :span="24" :xs="24">
-        <el-card class="mb10">
-          <el-form
-            class="mb-15"
-            :model="queryParams"
-            ref="queryRef"
-            :inline="true"
-          >
-            <el-row>
-              <el-col span="24">
-                <el-form-item label="用户名称" prop="username">
-                  <el-input
-                    v-model="queryParams.username"
-                    placeholder="请输入用户名称"
-                    clearable
-                    @keyup.enter="handleQuery"
-                  />
-                </el-form-item>
-                <!-- <el-form-item label="手机号码" prop="phonenumber">
-                  <el-input
-                    v-model="queryParams.phonenumber"
-                    placeholder="请输入手机号码"
-                    clearable
-                    @keyup.enter="handleQuery"
-                  />
-                </el-form-item> -->
-                <el-form-item label="状态" prop="status">
-                  <el-select
-                    v-model="queryParams.status"
-                    placeholder="用户状态"
-                    clearable
-                    style="width: 176px"
-                  >
-                    <el-option
-                      v-for="dict in sys_normal_disable"
-                      :key="dict.value"
-                      :label="dict.label"
-                      :value="dict.value"
-                    />
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="创建时间">
-                  <el-date-picker
-                    style="width: 200px"
-                    v-model="dateRange"
-                    value-format="YYYY-MM-DD"
-                    type="daterange"
-                    range-separator="-"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                  ></el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                  <el-button class="ml50" type="primary" @click="handleQuery"
-                    >搜索</el-button
-                  >
-                  <el-button @click="resetQuery">重置</el-button>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col span="24"> </el-col>
-            </el-row>
-          </el-form>
-        </el-card>
         <el-card>
           <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
@@ -89,7 +25,7 @@
             :data="userList"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column type="selection" width="50" align="center" />
+            <!-- <el-table-column type="selection" width="50" align="center" /> -->
             <el-table-column
               label="用户名称"
               align="center"
@@ -141,7 +77,7 @@
                 <span>{{ scope.row.createTime }}</span>
               </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
               label="操作"
               align="center"
               width="150"
@@ -201,7 +137,7 @@
                   ></el-button>
                 </el-tooltip>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
           <pagination
             v-show="total > 0"
