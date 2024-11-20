@@ -31,14 +31,28 @@ export default defineConfig(({ mode, command }) => {
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
         "/user": {
-          target: "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
+          target:
+            "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/user/, "/user"),
         },
         "/role": {
-          target: "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
+          target:
+            "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/role/, "/role"),
+        },
+        "/statistics": {
+          target:
+            "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/statistics/, "/statistics"),
+        },
+        "/ai": {
+          target:
+            "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/ai/, "/ai"),
         },
       },
     },

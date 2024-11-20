@@ -12,9 +12,9 @@
           >
             <el-row>
               <el-col span="24">
-                <el-form-item label="用户名称" prop="userName">
+                <el-form-item label="用户名称" prop="username">
                   <el-input
-                    v-model="queryParams.userName"
+                    v-model="queryParams.username"
                     placeholder="请输入用户名称"
                     clearable
                     @keyup.enter="handleQuery"
@@ -75,21 +75,10 @@
 
             <el-col :span="1.5">
               <el-button
-                type="info"
-                plain
-                icon="Upload"
-                @click="handleImport"
-                v-hasPermi="['system:user:import']"
-                >导入</el-button
-              >
-            </el-col>
-            <el-col :span="1.5">
-              <el-button
                 type="warning"
                 plain
                 icon="Download"
                 @click="handleExport"
-                v-hasPermi="['system:user:export']"
                 >导出</el-button
               >
             </el-col>
@@ -102,68 +91,54 @@
           >
             <el-table-column type="selection" width="50" align="center" />
             <el-table-column
-              label="用户编号"
+              label="用户名称"
               align="center"
-              key="userId"
-              prop="userId"
+              key="username"
+              prop="username"
+              v-if="columns[0].visible"
+              :show-overflow-tooltip="true"
+            />
+             <el-table-column
+              label="用户年龄"
+              align="center"
+              key="age"
+              prop="age"
               v-if="columns[0].visible"
             />
             <el-table-column
-              label="用户名称"
+              label="邮箱"
               align="center"
-              key="userName"
-              prop="userName"
-              v-if="columns[1].visible"
-              :show-overflow-tooltip="true"
-            />
-            <el-table-column
-              label="用户昵称"
-              align="center"
-              key="nickName"
-              prop="nickName"
+              key="email"
+              prop="email"
               v-if="columns[2].visible"
-              :show-overflow-tooltip="true"
-            />
-            <el-table-column
-              label="部门"
-              align="center"
-              key="deptName"
-              prop="dept.deptName"
-              v-if="columns[3].visible"
               :show-overflow-tooltip="true"
             />
             <el-table-column
               label="手机号码"
               align="center"
-              key="phonenumber"
-              prop="phonenumber"
+              key="phone"
+              prop="phone"
+              v-if="columns[3].visible"
+              width="120"
+            />
+            <el-table-column
+              label="地址"
+              align="center"
+              key="address"
+              prop="address"
               v-if="columns[4].visible"
               width="120"
             />
             <el-table-column
-              label="状态"
-              align="center"
-              key="status"
-              v-if="columns[5].visible"
-            >
-              <template #default="scope">
-                <el-switch
-                  v-model="scope.row.status"
-                  active-value="0"
-                  inactive-value="1"
-                  @change="handleStatusChange(scope.row)"
-                ></el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column
               label="创建时间"
               align="center"
+              key="createTime"
               prop="createTime"
-              v-if="columns[6].visible"
+              v-if="columns[5].visible"
               width="160"
             >
               <template #default="scope">
-                <span>{{ parseTime(scope.row.createTime) }}</span>
+                <span>{{ scope.row.createTime }}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -290,10 +265,10 @@
             <el-form-item
               v-if="form.userId == undefined"
               label="用户名称"
-              prop="userName"
+              prop="username"
             >
               <el-input
-                v-model="form.userName"
+                v-model="form.username"
                 placeholder="请输入用户名称"
                 maxlength="30"
               />
@@ -440,6 +415,8 @@
 
 <script setup name="User">
 import { getToken } from "@/utils/auth";
+import { downloadFile } from "@/utils/download";
+
 import {
   changeUserStatus,
   listUser,
@@ -449,6 +426,7 @@ import {
   updateUser,
   addUser,
   deptTreeSelect,
+  listUserExport,
 } from "@/api/system/user";
 
 const router = useRouter();
@@ -490,13 +468,12 @@ const upload = reactive({
 });
 // 列显隐信息
 const columns = ref([
-  { key: 0, label: `用户编号`, visible: true },
-  { key: 1, label: `用户名称`, visible: true },
-  { key: 2, label: `用户昵称`, visible: true },
-  { key: 3, label: `部门`, visible: true },
-  { key: 4, label: `手机号码`, visible: true },
-  { key: 5, label: `状态`, visible: true },
-  { key: 6, label: `创建时间`, visible: true },
+  { key: 0, label: `用户名称`, visible: true },
+  { key: 1, label: `用户年龄`, visible: true },
+  { key: 2, label: `邮箱`, visible: true },
+  { key: 3, label: `手机号码`, visible: true },
+  { key: 4, label: `地址`, visible: true },
+  { key: 5, label: `创建时间`, visible: true },
 ]);
 
 const data = reactive({
@@ -504,13 +481,13 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    userName: undefined,
+    username: undefined,
     phonenumber: undefined,
     status: undefined,
     deptId: undefined,
   },
   rules: {
-    userName: [
+    username: [
       { required: true, message: "用户名称不能为空", trigger: "blur" },
       {
         min: 2,
@@ -565,6 +542,19 @@ const filterNode = (value, data) => {
 watch(deptName, (val) => {
   proxy.$refs["deptTreeRef"].filter(val);
 });
+  const parseTime = (timestamp) => {
+  const date = new Date(timestamp);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+ 
+
 
 /** 查询部门下拉树结构 */
 function getDeptTree() {
@@ -579,8 +569,8 @@ function getList() {
   listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(
     (res) => {
       loading.value = false;
-      userList.value = res.rows;
-      total.value = res.total;
+      userList.value = res;
+      total.value = res.length || 0;
     }
   );
 }
@@ -622,31 +612,17 @@ function handleDelete(row) {
 }
 
 /** 导出按钮操作 */
-function handleExport() {
-  proxy.download(
-    "system/user/export",
-    {
+const handleExport = async () => {
+  let params = {
       ...queryParams.value,
-    },
-    `user_${new Date().getTime()}.xlsx`
-  );
+    };
+	let req = await listUserExport(params);
+	let name = t("用户管理列表");
+	downloadFile(req, name, ".csv");
 }
 
-/** 用户状态修改  */
-function handleStatusChange(row) {
-  let text = row.status === "0" ? "启用" : "停用";
-  proxy.$modal
-    .confirm('确认要"' + text + '""' + row.userName + '"用户吗?')
-    .then(function () {
-      return changeUserStatus(row.userId, row.status);
-    })
-    .then(() => {
-      proxy.$modal.msgSuccess(text + "成功");
-    })
-    .catch(function () {
-      row.status = row.status === "0" ? "1" : "0";
-    });
-}
+
+
 
 /** 更多操作 */
 function handleCommand(command, row) {
@@ -671,7 +647,7 @@ function handleAuthRole(row) {
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
   proxy
-    .$prompt('请输入"' + row.userName + '"的新密码', "提示", {
+    .$prompt('请输入"' + row.username + '"的新密码', "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
       closeOnClickModal: false,
@@ -743,7 +719,7 @@ function reset() {
   form.value = {
     userId: undefined,
     deptId: undefined,
-    userName: undefined,
+    username: undefined,
     nickName: undefined,
     password: undefined,
     phonenumber: undefined,
