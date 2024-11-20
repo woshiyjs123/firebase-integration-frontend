@@ -1,5 +1,5 @@
 <template>
-  <div class="index">欢迎您使用管理后台</div>
+  <div class="index">欢迎您使用慈善社区管理后台</div>
 </template>
 
 <script>

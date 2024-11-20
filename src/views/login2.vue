@@ -2,7 +2,7 @@
   <div class="login_1">
     <div class="login-opacity">
       <div class="login_o">
-        <div class="title">慈善网站管理系统</div>
+        <div class="title">慈善社区管理系统</div>
         <div class="login_b">
           <div class="login_in">
             <el-form

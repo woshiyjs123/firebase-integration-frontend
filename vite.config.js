@@ -30,10 +30,15 @@ export default defineConfig(({ mode, command }) => {
       open: true,
       proxy: {
         // https://cn.vitejs.dev/config/#server-proxy
-        "/dev-api": {
-          target: "http://localhost:8080",
+        "/user": {
+          target: "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
           changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/dev-api/, ""),
+          rewrite: (p) => p.replace(/^\/user/, "/user"),
+        },
+        "/role": {
+          target: "https://firebase-integration-backend-454546327917.us-central1.run.app/firebase-integration",
+          changeOrigin: true,
+          rewrite: (p) => p.replace(/^\/role/, "/role"),
         },
       },
     },

@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken,getUserName,setUserName,removeUserName } from '@/utils/auth'
 import defAva from '@/assets/images/profile.jpg'
 
 const useUserStore = defineStore(
@@ -8,7 +8,7 @@ const useUserStore = defineStore(
     state: () => ({
       token: getToken(),
       id: '',
-      name: '',
+      username: getUserName(),
       avatar: '',
       roles: [],
       permissions: []
@@ -18,11 +18,11 @@ const useUserStore = defineStore(
       login(userInfo) {
         const username = userInfo.username.trim()
         const password = userInfo.password
-        const code = userInfo.code
-        const uuid = userInfo.uuid
         return new Promise((resolve, reject) => {
-          login(username, password, code, uuid).then(res => {
+          login(username, password).then(res => {
+            console.log("res===",res)
             setToken(res.token)
+            setUserName(res.username)
             this.token = res.token
             resolve()
           }).catch(error => {
@@ -55,11 +55,12 @@ const useUserStore = defineStore(
       // 退出系统
       logOut() {
         return new Promise((resolve, reject) => {
-          logout(this.token).then(() => {
+          logout().then(() => {
             this.token = ''
             this.roles = []
             this.permissions = []
             removeToken()
+            removeUserName()
             resolve()
           }).catch(error => {
             reject(error)
