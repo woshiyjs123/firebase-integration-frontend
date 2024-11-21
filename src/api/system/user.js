@@ -17,6 +17,41 @@ export function listUserHealth() {
     method: "get",
   });
 }
+
+// 获取博文平均评分
+export function getBlogStar(data) {
+  return request({
+    url: "/comment/query-blog-star",
+    method: "post",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    data,
+  });
+}
+export function getBlogComments(data) {
+  return request({
+    url: "/comment/query-blog-comments",
+    method: "post",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    data,
+  });
+}
+export function postUserRegister(data) {
+  return request({
+    url: "/user/user-register",
+    method: "post",
+    // headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    data,
+  });
+}
+
+// 给博文添加评论;
+export function getBlogAdd(data) {
+  return request({
+    url: "/comment/add",
+    method: "post",
+    data,
+  });
+}
 // 用户下载
 export function listUserExport(data) {
   return request({

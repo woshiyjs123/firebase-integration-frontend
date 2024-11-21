@@ -50,6 +50,18 @@ export const getRouters = () => {
               },
             },
             {
+              name: "BizNewsManagement",
+              path: "bizNewsManagement",
+              hidden: false,
+              component: "system/bizNewsManagement/index",
+              meta: {
+                title: "社区资讯",
+                icon: "switch",
+                noCache: false,
+                link: null,
+              },
+            },
+            {
               name: "CacheList",
               path: "cacheList",
               hidden: false,
@@ -69,6 +81,19 @@ export const getRouters = () => {
               meta: {
                 title: "AI问答",
                 icon: "code",
+                noCache: false,
+                link: null,
+              },
+            },
+
+            {
+              name: "BizCharityProjectPublicity",
+              path: "bizCharityProjectPublicity",
+              hidden: false,
+              component: "system/bizCharityProjectPublicity/index",
+              meta: {
+                title: "备忘录",
+                icon: "dashboard",
                 noCache: false,
                 link: null,
               },

@@ -4,8 +4,9 @@
       <div class="login_o">
         <div class="title">慈善社区管理系统</div>
         <div class="login_b">
-          <div class="login_in">
+          <div  class="login_in">
             <el-form
+             v-if="!isRegister"
               ref="form"
               :model="formInfo"
               @keyup.enter="submitHandle()"
@@ -37,15 +38,62 @@
                 >
               </el-form-item>
             </el-form>
+            <el-form
+             v-else
+                style="    max-height: 360px;
+    overflow-y: scroll;"
+              ref="formSign"
+              :model="formSignInfo"
+              @keyup.enter="submitSignHandle()"
+              :rules="formSignRules"
+            >
+              <el-form-item label="账号" prop="username">
+                <el-input v-model="formSignInfo.username" placeholder="请输入" />
+              </el-form-item>
+              <el-form-item label="密码" prop="password">
+                <el-input
+                  type="password"
+                  v-model="formSignInfo.password"
+                  placeholder="请输入"
+                />
+              </el-form-item>
+               <el-form-item label="电话" prop="phone">
+                <el-input v-model="formSignInfo.phone" placeholder="请输入" />
+              </el-form-item>
+               <el-form-item label="地址" prop="address">
+                <el-input v-model="formSignInfo.address" placeholder="请输入" />
+              </el-form-item>
+              <el-form-item label="年龄" prop="age">
+                <el-input-number v-model="formSignInfo.age" placeholder="请输入" />
+              </el-form-item>
+               <el-form-item label="邮箱" prop="email">
+                <el-input v-model="formSignInfo.email" placeholder="请输入" />
+              </el-form-item>
+              <el-form-item
+                label=""
+                prop="checkAgre"
+                v-if="isRegister"
+                class="agre_item"
+              >
+                <el-checkbox
+                  class="agreement"
+                  v-model="formSignInfo.checkAgre"
+                ></el-checkbox
+                >我已阅读并同意<span class="agre">用户条款</span>和<span
+                  class="agre"
+                  >隐私协议</span
+                >
+              </el-form-item>
+            </el-form>
             <div class="comit" @click="commit">
               {{ !isRegister ? "确定" : "立即注册" }}
             </div>
             <div class="bot_tip" v-if="isRegister">
               已有账号？<span @click="changeForm">立即登录</span>
             </div>
-            <!-- <div class="bot_tip" v-else>
+            <div class="bot_tip" v-else>
               还没有账号？<span @click="changeForm">立即注册</span>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -59,17 +107,26 @@ import { encrypt, decrypt } from "@/utils/jsencrypt";
 import useUserStore from "@/store/modules/user";
 import { ref, computed } from "vue";
 import router from "@/router";
+  import { postUserRegister } from "@/api/system/user";
 
 const userStore = useUserStore();
 const route = useRoute();
 const { proxy } = getCurrentInstance();
 
 const formInfo = ref({
-  username: "admin",
-  password: "admin123",
+  username: "",
+  password: "",
   rememberMe: false,
   code: "",
   uuid: "",
+});
+const formSignInfo = ref({
+  username: "",
+  password: "",
+  address: "",
+  phone: "",
+  age: "",
+  email: "",
 });
 
 // const formInfo = ref({
@@ -105,6 +162,7 @@ watch(
 );
 
 const form = ref(null);
+const formSign = ref(null);
 const isRegister = ref(false);
 
 const changeForm = () => {
@@ -118,6 +176,31 @@ const changeForm = () => {
 };
 
 const commit = async () => {
+  if(isRegister.value){
+    // 注册
+     proxy.$refs.formSign.validate((valid) => {
+    if (valid) {
+      console.log("formInfo===",formSignInfo.value)
+      
+
+ const params ={
+          ...formSignInfo.value,
+        }
+          postUserRegister(params).then(res => {
+            if(res==="success"){
+ElMessage.success("评价成功");
+      open.value = false;
+
+getList()
+            }
+
+
+          })
+     
+    }
+  });
+
+  }else{
   proxy.$refs.form.validate((valid) => {
     if (valid) {
       // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
@@ -146,6 +229,7 @@ const commit = async () => {
       });
     }
   });
+}
 };
 </script>
 
