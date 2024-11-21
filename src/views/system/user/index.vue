@@ -5,9 +5,9 @@
       <el-col :span="24" :xs="24">
         <el-card>
           <el-row :gutter="10" class="mb8">
-            <el-col :span="1.5">
+            <!-- <el-col :span="1.5">
               <el-button type="primary" @click="handleAdd">新增</el-button>
-            </el-col>
+            </el-col> -->
 
             <el-col :span="1.5">
               <el-button
@@ -63,7 +63,7 @@
               key="address"
               prop="address"
               v-if="columns[4].visible"
-              width="120"
+              width="200"
             />
             <el-table-column
               label="创建时间"
@@ -71,7 +71,7 @@
               key="createTime"
               prop="createTime"
               v-if="columns[5].visible"
-              width="160"
+              width="200"
             >
               <template #default="scope">
                 <span>{{ scope.row.createTime }}</span>

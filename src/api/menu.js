@@ -38,6 +38,18 @@ export const getRouters = () => {
               },
             },
             {
+              name: "BizUserFollowProjectManagement",
+              path: "bizUserFollowProjectManagement",
+              hidden: false,
+              component: "system/bizUserFollowProjectManagement/index",
+              meta: {
+                title: "健康档案",
+                icon: "textarea",
+                noCache: false,
+                link: null,
+              },
+            },
+            {
               name: "CacheList",
               path: "cacheList",
               hidden: false,
@@ -70,18 +82,6 @@ export const getRouters = () => {
               meta: {
                 title: "邮件发送",
                 icon: "logininfor",
-                noCache: false,
-                link: null,
-              },
-            },
-            {
-              name: "BizUserFollowProjectManagement",
-              path: "bizUserFollowProjectManagement",
-              hidden: false,
-              component: "system/bizUserFollowProjectManagement/index",
-              meta: {
-                title: "用户关注项目管理",
-                icon: "textarea",
                 noCache: false,
                 link: null,
               },

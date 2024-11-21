@@ -9,6 +9,14 @@ export function listUser(data) {
     data: data,
   });
 }
+
+// 查询用户健康档案列表
+export function listUserHealth() {
+  return request({
+    url: "/user/query-user-health-infos",
+    method: "get",
+  });
+}
 // 用户下载
 export function listUserExport(data) {
   return request({
