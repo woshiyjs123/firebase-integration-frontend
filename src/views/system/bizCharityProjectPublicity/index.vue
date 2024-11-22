@@ -13,8 +13,8 @@
 
               />
           </el-form-item>
-          <el-form-item label="备忘内容" prop="content">
-            <el-input v-model="form.content" type="textarea" placeholder="请输入备忘内容" />
+          <el-form-item label="预约内容" prop="content">
+            <el-input v-model="form.content" type="textarea" placeholder="请输入预约内容" />
           </el-form-item>
       </el-form>
       <template #footer>
