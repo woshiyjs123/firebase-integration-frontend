@@ -57,6 +57,9 @@
                   placeholder="请输入"
                 />
               </el-form-item>
+               <el-form-item label="姓名" prop="name">
+                <el-input v-model="formSignInfo.name" placeholder="请输入" />
+              </el-form-item>
                <el-form-item label="电话" prop="phone">
                 <el-input v-model="formSignInfo.phone" placeholder="请输入" />
               </el-form-item>
@@ -108,6 +111,7 @@ import useUserStore from "@/store/modules/user";
 import { ref, computed } from "vue";
 import router from "@/router";
   import { postUserRegister } from "@/api/system/user";
+import { ElMessage } from 'element-plus'
 
 const userStore = useUserStore();
 const route = useRoute();
@@ -123,6 +127,7 @@ const formInfo = ref({
 const formSignInfo = ref({
   username: "",
   password: "",
+  name:"",
   address: "",
   phone: "",
   age: "",
@@ -180,18 +185,14 @@ const commit = async () => {
     // 注册
      proxy.$refs.formSign.validate((valid) => {
     if (valid) {
-      console.log("formInfo===",formSignInfo.value)
-      
-
  const params ={
           ...formSignInfo.value,
+          roles:"guest"
         }
           postUserRegister(params).then(res => {
-            if(res==="success"){
-ElMessage.success("评价成功");
-      open.value = false;
-
-getList()
+            if(res==="successfully registered"){
+             ElMessage.success("注册成功,请登录");
+              isRegister.value = !isRegister.value;
             }
 
 

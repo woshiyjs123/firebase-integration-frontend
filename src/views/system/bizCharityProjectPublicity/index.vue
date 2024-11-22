@@ -9,6 +9,8 @@
                 range-separator="To"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
+                					value-format="YYYY-MM-DD HH:mm:ss"
+
               />
           </el-form-item>
           <el-form-item label="备忘内容" prop="content">
@@ -21,18 +23,95 @@
         </div>
       </template>
     </el-card>
+        <el-card>
+          <!-- <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-button type="primary" @click="handleAdd">新增</el-button>
+            </el-col>
+          </el-row> -->
+
+          <el-table
+            v-loading="loading"
+            :data="userList"
+          >
+            <!-- <el-table-column type="selection" width="50" align="center" /> -->
+            <el-table-column
+              label="用户名称"
+              align="center"
+              key="username"
+              prop="username"
+              v-if="columns[0].visible"
+              :show-overflow-tooltip="true"
+            />
+             <el-table-column
+              label="描述"
+              align="center"
+              key="desc"
+              prop="desc"
+              v-if="columns[0].visible"
+            />
+            <el-table-column
+              label="开始时间"
+              align="center"
+              key="startTime"
+              prop="startTime"
+              v-if="columns[2].visible"
+              :show-overflow-tooltip="true"
+            />
+            <el-table-column
+              label="结束时间"
+              align="center"
+              key="endTime"
+              prop="endTime"
+              v-if="columns[3].visible"
+            />
+
+            <el-table-column
+              label="操作"
+              align="center"
+              width="150"
+              class-name="small-padding fixed-width"
+            >
+              <template #default="scope">
+                <el-tooltip
+                  content="取消预约"
+                  placement="top"
+                >
+                  <el-button
+                    link
+                    type="primary"
+                    icon="Edit"
+                    @click="handleCancel(scope.row)"
+                  ></el-button>
+                </el-tooltip>
+              
+               
+               
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            v-model:page="queryParams.pageNum"
+            v-model:limit="queryParams.pageSize"
+            @pagination="getList"
+          />
+        </el-card>
   </div>
 </template>
 
 <script setup name="BizAccountManagement">
-  import { mailSend } from "@/api/system/user";
+  import { reservationAdd, reservationCancel, reservationQuery } from "@/api/system/user";
   import { checkEmail } from '@/utils/validate'
 import { ElMessage } from 'element-plus'
+import { getUserName } from "@/utils/auth";
+import { ElMessageBox } from "element-plus";
 
   const { proxy } = getCurrentInstance();
   const askText = ref("无问答数据")
   const loading = ref(false);
-
+const userList = ref([]);
   /**定义关联表数据接收对象*/
   const data = reactive({
 
@@ -75,6 +154,46 @@ import { ElMessage } from 'element-plus'
     };
     proxy.resetForm("bizAccountManagementRef");
   }
+  // 列显隐信息
+const columns = ref([
+  { key: 0, label: `用户名称`, visible: true },
+  { key: 1, label: `内容`, visible: true },
+  { key: 2, label: `开始时间`, visible: true },
+  { key: 3, label: `结束时间`, visible: true },
+]);
+/** 查询用户列表 */
+function getList() {
+  loading.value = true;
+  reservationQuery({
+    username:getUserName()
+  }).then(
+    (res) => {
+      loading.value = false;
+      userList.value = res;
+      total.value = res.length || 0;
+    }
+  );
+}
+getList();
+function handleCancel(row) {
+  console.log("row===",row)
+  ElMessageBox.confirm("确定取消当前备忘预约吗？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      reservationCancel({
+        reservationCode:row.reservationCode
+      }).then(() => {
+        ElMessage.success("取消成功");
+        getList();
+      });
+    })
+    .catch(() => {});
+  
+}
+
 
 
 
@@ -83,20 +202,25 @@ import { ElMessage } from 'element-plus'
   function submitForm() {
     proxy.$refs["bizAccountManagementRef"].validate(valid => {
       if (valid) {
+        console.log("form===",form)
          const parmas ={
-            content:form.value.content,
-            subject:form.value.title,
-            to:form.value.address,
+            startTime:form.value.time[0],
+            endTime:form.value.time[1],
+            desc:form.value.content,
           }
-          mailSend(parmas).then(res => {
-            // if(res==="success"){
-            //   ElMessage.success("邮件发送成功了，请注意查收")
-            //   reset()
-            // }
+          reservationAdd(parmas).then(res => {
+            if(res===""){
+                        ElMessage.success("添加成功")
+        getList();
+            }else{
+                ElMessage.warning("预约时间冲突，请进行调整")
+            }
           }); 
       }
     });
   }
+
+
 
 </script>
 <style lang="scss" scoped>

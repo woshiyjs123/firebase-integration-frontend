@@ -61,6 +61,35 @@ export function listUserExport(data) {
     responseType: "blob",
   });
 }
+// 增加预约事件
+export function reservationAdd(data) {
+  return request({
+    url: "/reservation/add",
+    method: "post",
+    data: data,
+  });
+}
+
+// 取消预约事件
+export function reservationCancel(data) {
+  return request({
+    url: "/reservation/cancel",
+    method: "post",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+
+    data: data,
+  });
+}
+// 预约事件列表
+export function reservationQuery(data) {
+  return request({
+    url: "/reservation/query",
+    method: "post",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+
+    data: data,
+  });
+}
 
 // 查询用户详细
 export function getUser(userId) {
