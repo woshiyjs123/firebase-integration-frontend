@@ -18,13 +18,13 @@
       
     </el-card>
     <el-card v-if="!!resultList.length">
-      <span>精彩评论&&得分</span>
+      <span>精彩评论</span>
       <ul class="popup-result-scroll">
           <li class="score-li" v-for='item in resultList' :key="item">
-            <div class="score-list">
-              <span class="item result-blogContentStar">内容评分：{{item.blogContentStar}}</span>
+            <!-- <div class="score-list"> -->
+              <!-- <span class="item result-blogContentStar">内容评分：{{item.blogContentStar}}</span>
             <span class="item result-blogInnovativenessStar">创新性评分：{{item.blogInnovativenessStar}}</span>
-            <span class="item result-blogStyleOfWritingStar">文笔评分：{{item.blogStyleOfWritingStar}}</span></div>
+            <span class="item result-blogStyleOfWritingStar">文笔评分：{{item.blogStyleOfWritingStar}}</span></div> -->
             <p class="score-content">评论内容：{{item.comment}}</p>
              <p class="score-position">位置：北京</p>
           </li>
@@ -33,7 +33,7 @@
      <!-- 添加或修改用户配置对话框 -->
     <el-dialog :title="title" v-model="open" width="600px" append-to-body>
       <el-form :model="form" :rules="rules" ref="userRef" label-width="80px">
-        <el-row>
+        <el-row v-if="addBlogStarFlag">
           <el-col :span="12">
             <el-form-item label="内容评分">
               <el-input-number
@@ -94,7 +94,7 @@
 </template>
 
 <script setup name="BizNewsManagement">
-  import { getBlogAdd, getBlogStar, getBlogComments} from "@/api/system/user";
+  import { getBlogAdd, getBlogStar, getBlogComments, canAddBlogStar, addBlogComment, addBlogStar} from "@/api/system/user";
   import { getUserName } from '@/utils/auth'
 import { ElMessage } from 'element-plus'
 
@@ -102,6 +102,7 @@ import { ElMessage } from 'element-plus'
 
   const bizNewsManagementList = ref([]);
   const open = ref(false);
+    const addBlogStarFlag = ref(false);
   const loading = ref(true);
   const score = ref(0);
   const ids = ref([]);
@@ -153,6 +154,14 @@ import { ElMessage } from 'element-plus'
   function getList() {
     getBlogStar({blogCode:"111111"}).then(res => {
       score.value = res
+    });
+    canAddBlogStar({blogCode:"111111",username:getUserName()}).then(res => {
+      console.log("res==",res)
+      if(res){
+        addBlogStarFlag.value = res
+      }else{
+        addBlogStarFlag.value = false
+      }
     });
     getBlogComments({blogCode:"111111"}).then(res => {
       resultList.value = res
@@ -222,22 +231,40 @@ const update = (val) => {
   /** 提交按钮 */
   function submitForm() {
     proxy.$refs["userRef"].validate(valid => {
+      const {blogContentStar,blogInnovativenessStar,blogStyleOfWritingStar,comment} = form.value
       if (valid) {
-        const params ={
-          ...form.value,
-          blogCode:"111111",
-          username:getUserName()
-        }
-          getBlogAdd(params).then(res => {
+        if(addBlogStarFlag){
+          const params ={
+            blogContentStar,
+            blogInnovativenessStar,
+            blogStyleOfWritingStar,
+            blogCode:"111111",
+            username:getUserName()
+          }
+          addBlogStar(params).then(res => {
             if(res==="success"){
-ElMessage.success("评价成功");
-      open.value = false;
-
-getList()
+              ElMessage.success("评分成功");
             }
-                  open.value = false;
+            open.value = false;
 
           });
+        }
+        const params ={
+            comment,
+            blogCode:"111111",
+            username:getUserName()
+          }
+          addBlogComment(params).then(res => {
+            if(res==="success"){
+              ElMessage.success("评价成功");
+            }
+            open.value = false;
+
+          });
+          open.value = false;
+          setTimeout(() => {
+            getList()
+          },3000)
       }
     });
   }

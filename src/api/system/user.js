@@ -27,6 +27,34 @@ export function getBlogStar(data) {
     data,
   });
 }
+// 判断用户是否还可以对某个博文评分;
+export function canAddBlogStar(data) {
+  return request({
+    url: "/comment/can-add-blog-star",
+    method: "post",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    data,
+  });
+}
+// 给博文评星;
+export function addBlogStar(data) {
+  return request({
+    url: "/comment/add-star",
+    method: "post",
+    // headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    data,
+  });
+}
+export function addBlogComment(data) {
+  return request({
+    url: "/comment/add-comment",
+    method: "post",
+    // headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    data,
+  });
+}
+
+// 获取评论列表
 export function getBlogComments(data) {
   return request({
     url: "/comment/query-blog-comments",
@@ -35,6 +63,7 @@ export function getBlogComments(data) {
     data,
   });
 }
+// 注册
 export function postUserRegister(data) {
   return request({
     url: "/user/user-register",
