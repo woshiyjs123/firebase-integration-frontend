@@ -26,6 +26,7 @@
             <span class="item result-blogInnovativenessStar">创新性评分：{{item.blogInnovativenessStar}}</span>
             <span class="item result-blogStyleOfWritingStar">文笔评分：{{item.blogStyleOfWritingStar}}</span></div>
             <p class="score-content">评论内容：{{item.comment}}</p>
+             <p class="score-position">位置：北京</p>
           </li>
       </ul>
     </el-card>
@@ -294,6 +295,9 @@ getList()
     font-size: 12px;
     right: 8px;
     top: 2px;
+}
+.score-position{
+  font-size: 12px;
 }
 
 </style>
