@@ -62,18 +62,6 @@ export const getRouters = () => {
               },
             },
             {
-              name: "CacheList",
-              path: "cacheList",
-              hidden: false,
-              component: "monitor/cache/list",
-              meta: {
-                title: "数据报表",
-                icon: "redis-list",
-                noCache: false,
-                link: null,
-              },
-            },
-            {
               name: "BizAccountManagement",
               path: "bizAccountManagement",
               hidden: false,
@@ -92,7 +80,7 @@ export const getRouters = () => {
               hidden: false,
               component: "system/bizCharityProjectPublicity/index",
               meta: {
-                title: "备忘录",
+                title: "事件预约",
                 icon: "dashboard",
                 noCache: false,
                 link: null,
@@ -107,6 +95,18 @@ export const getRouters = () => {
               meta: {
                 title: "邮件发送",
                 icon: "logininfor",
+                noCache: false,
+                link: null,
+              },
+            },
+            {
+              name: "CacheList",
+              path: "cacheList",
+              hidden: false,
+              component: "monitor/cache/list",
+              meta: {
+                title: "数据报表",
+                icon: "redis-list",
                 noCache: false,
                 link: null,
               },

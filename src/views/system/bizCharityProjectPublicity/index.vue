@@ -9,8 +9,7 @@
                 range-separator="To"
                 start-placeholder="开始时间"
                 end-placeholder="结束时间"
-                					value-format="YYYY-MM-DD HH:mm:ss"
-
+                value-format="YYYY-MM-DD HH:mm:ss"
               />
           </el-form-item>
           <el-form-item label="预约内容" prop="content">
@@ -107,7 +106,7 @@
 import { ElMessage } from 'element-plus'
 import { getUserName } from "@/utils/auth";
 import { ElMessageBox } from "element-plus";
-
+const total = ref(0);
   const { proxy } = getCurrentInstance();
   const askText = ref("无问答数据")
   const loading = ref(false);
@@ -176,8 +175,7 @@ function getList() {
 }
 getList();
 function handleCancel(row) {
-  console.log("row===",row)
-  ElMessageBox.confirm("确定取消当前备忘预约吗？", "提示", {
+  ElMessageBox.confirm("确定取消当前预约吗？", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
@@ -202,7 +200,6 @@ function handleCancel(row) {
   function submitForm() {
     proxy.$refs["bizAccountManagementRef"].validate(valid => {
       if (valid) {
-        console.log("form===",form)
          const parmas ={
             startTime:form.value.time[0],
             endTime:form.value.time[1],
@@ -210,10 +207,10 @@ function handleCancel(row) {
           }
           reservationAdd(parmas).then(res => {
             if(res===""){
-                        ElMessage.success("添加成功")
-        getList();
+              ElMessage.success("添加成功")
+              getList();
             }else{
-                ElMessage.warning("预约时间冲突，请进行调整")
+              ElMessage.warning("预约时间冲突，请进行调整")
             }
           }); 
       }
